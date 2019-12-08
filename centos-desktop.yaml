@@ -1,0 +1,21 @@
+image: snowdreamtech/centos-desktop:latest
+tags: ["xfce4", "7"]
+manifests:
+  - image: snowdreamtechamd64/centos-desktop:latest
+    platform:
+      architecture: amd64
+      os: linux
+  - image: snowdreamtechi386/centos-desktop:latest
+    platform:
+      architecture: 386
+      os: linux
+  - image: snowdreamtecharm32v7/centos-desktop:latest
+    platform:
+      architecture: arm
+      os: linux
+      variant: v7
+  - image: snowdreamtecharm64v8/centos-desktop:latest
+    platform:
+      architecture: arm64
+      os: linux
+      variant: v8
