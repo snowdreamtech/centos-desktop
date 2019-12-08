@@ -1,4 +1,5 @@
 image: snowdreamtech/centos-desktop:8
+tags: ["xfce4"]
 manifests:
   - image: snowdreamtechamd64/centos-desktop:8
     platform:

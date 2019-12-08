@@ -11,7 +11,7 @@ readonly G_LOG_E='[ERROR]'
 main() {
     init
     launch_xvfb
-    launch_window_manager
+    #launch_window_manager
     run_vnc_server
 }
 
@@ -30,6 +30,11 @@ init(){
     if [ ! -d "/root/.vnc" ]; then
         mkdir /root/.vnc
     fi
+    
+    # create xstartup
+    echo -e '#!/bin/sh\nunset SESSION_MANAGER\nunset DBUS_SESSION_BUS_ADDRESS\nexec startxfce4 ' > /root/.vnc/xstartup
+    
+    chmod +x /root/.vnc/xstartup
 }
 
 launch_xvfb() {
@@ -57,8 +62,8 @@ launch_xvfb() {
 launch_window_manager() {
     local timeout=${XVFB_TIMEOUT:-5}
     
-    # Start and wait for either gnome-session  to be fully up or we hit the timeout.
-    gnome-session > /dev/null 2>&1 &
+    # Start and wait for either xfce4 to be fully up or we hit the timeout.
+    startxfce4 > /dev/null 2>&1 &
     local loopCount=0
     until wmctrl -m > /dev/null 2>&1
     do
@@ -66,13 +71,14 @@ launch_window_manager() {
         sleep 1
         if [ ${loopCount} -gt ${timeout} ]
         then
-            echo "${G_LOG_E} gnome failed to start."
+            echo "${G_LOG_E} xfce4 failed to start."
             exit 1
         fi
     done
 }
 
 run_vnc_server() {
+    printf "${VNC_PASSWORD}\n${VNC_PASSWORD}\n\n" | vncpasswd
     vncserver $DISPLAY -autokill -geometry ${GEOMETRY} -depth ${DEPTH} &
     wait $!
 }
